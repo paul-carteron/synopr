@@ -3,6 +3,11 @@
 #' @param date character; vector of dates format as "YYYYMM"
 #' @param between boolean; if TRUE all month between first and last date are downloaded.
 #' In this case, `date` must be set with only two date.
+#' @param summarized boolean; if `TRUE` datasets already summarized per month by meteofrance are returned.
+#'
+#' @details
+#' SYNOP every 3h data are available from 1996. When `summarized` is TRUE
+#' summarized dataset from 1990 are available.
 #'
 #' @importFrom cli cli_progress_bar cli_progress_update
 #'
@@ -17,13 +22,20 @@
 #'
 #' }
 #'
-sy_download <- function(date, between = F) {
+sy_download <- function(date, between = F, summarized = F) {
+
+   date_before_1990 <- as_date(date) < as.Date("1990-01-01")
+   if (any(date_before_1990) & isTRUE(summarized)){
+      stop("Wrong date(s) : ",
+           paste0(date[date_before_1990], collapse = ", "),
+           "\nSummarized by month data are available only from 1990.", call. = F)
+   }
 
    date_before_1996 <- as_date(date) < as.Date("1996-01-01")
-   if (any(date_before_1996)){
+   if (any(date_before_1996) & isFALSE(summarized)){
       stop("Wrong date(s) : ",
            paste0(date[date_before_1996], collapse = ", "),
-           "\nSYNOP data doesn't exist before 1996.", call. = F)
+           "\nSYNOP every 3h data are available only from 1996.", call. = F)
    }
 
    if (between){
@@ -49,7 +61,7 @@ sy_download <- function(date, between = F) {
    res <- list()
    for (i in date){
       cli_progress_update()
-      res_temp <- read_synop(i)
+      res_temp <- read_synop(i, summarized = summarized)
       res <- rbind(res, res_temp)
    }
 
@@ -58,13 +70,19 @@ sy_download <- function(date, between = F) {
 
 #' @description download and read one synop file
 #' @param date character; date format as "YYYYMM"
+#' @inheritParams sy_download
 #' @importFrom utils download.file read.csv2
 #' @return logical
 #' @noRd
 #'
-read_synop <- function(date){
-   url <- sprintf("https://donneespubliques.meteofrance.fr/donnees_libres/Txt/Synop/Archive/synop.%s.csv.gz",
-                  date)
+read_synop <- function(date, summarized){
+
+   basename <- ifelse(summarized,
+                      "Climat/climat",
+                      "Synop/Archive/synop")
+
+   url <- sprintf("https://donneespubliques.meteofrance.fr/donnees_libres/Txt/%s.%s.csv.gz",
+                  basename, date)
 
    tmp <- tempfile()
 

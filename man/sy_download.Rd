@@ -4,19 +4,25 @@
 \alias{sy_download}
 \title{sy_download}
 \usage{
-sy_download(date, between = F)
+sy_download(date, between = F, summarized = F)
 }
 \arguments{
 \item{date}{character; vector of dates format as "YYYYMM"}
 
 \item{between}{boolean; if TRUE all month between first and last date are downloaded.
 In this case, \code{date} must be set with only two date.}
+
+\item{summarized}{boolean; if \code{TRUE} datasets already summarized per month by meteofrance are returned.}
 }
 \value{
 data.frame
 }
 \description{
 sy_download
+}
+\details{
+SYNOP every 3h data are available from 1996. When \code{summarized} is TRUE
+summarized dataset from 1990 are available.
 }
 \examples{
 \dontrun{
