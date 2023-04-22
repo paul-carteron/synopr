@@ -1,3 +1,7 @@
+#' @description convert "YYYYMM" format to "YYYYMMDD"
+#' @param x character; date format as "YYYYMM"
+#' @noRd
+#'
 as_date <- function(x){
 
    if (!inherits(x, "character")){
@@ -12,6 +16,10 @@ as_date <- function(x){
    date <- as.Date(x, format = "%Y%m%d")
 }
 
+#' @description convert kelvin to degree
+#' @param x numeric
+#' @noRd
+#'
 kel_to_deg <- function(x){
    if (!inherits(x, "numeric")){
       stop("x should be numeric.")

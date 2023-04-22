@@ -14,7 +14,8 @@
 #' }
 #'
 sy_nearest_station <- function(x){
-   stations <- read_sf("https://donneespubliques.meteofrance.fr/donnees_libres/Txt/Synop/postesSynop.json")
+
+   stations <- sy_stations()
    x <- st_transform(x, st_crs(stations))
 
    nearest_station <- stations[st_nearest_feature(x, stations),]
