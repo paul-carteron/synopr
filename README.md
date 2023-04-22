@@ -8,8 +8,8 @@
 [![R-CMD-check](https://github.com/paul-carteron/synopr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/paul-carteron/synopr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of synopr is to download and plot SYNOP meteorological data
-from ‘Meteo France’
+The goal of synopr is to download and plot free SYNOP meteorological
+data from ‘Meteo France’
 
 ## Installation
 
