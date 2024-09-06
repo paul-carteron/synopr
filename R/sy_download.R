@@ -9,7 +9,8 @@
 #' SYNOP every 3h data are available from 1996. When `summarized` is TRUE
 #' summarized dataset from 1990 are available.
 #'
-#' @importFrom cli cli_progress_bar cli_progress_update
+#' @importFrom cli cli_progress_bar cli_progress_update pb_spin pb_current pb_total
+#' pb_eta pb_elapsed col_green
 #'
 #' @return data.frame
 #' @export
@@ -19,6 +20,7 @@
 #' dates <- c("202201", "202301")
 #' two_month <- sy_download(dates)
 #' all_year <- sy_download(dates, between = T)
+#' all_year_summarized <- sy_download(dates, between = T, summarized = T)
 #'
 #' }
 #'
@@ -50,14 +52,17 @@ sy_download <- function(date, between = F, summarized = F) {
          format("%Y%m")
    }
 
-   cli_progress_bar(format = paste0("{pb_spin} Downloading {i} ",
-                                    "[{pb_current}/{pb_total}]   ETA:{pb_eta}"),
-                    format_done = paste0(
-                       "{col_green(symbol$tick)} Downloaded {pb_total} files ",
-                       "in {pb_elapsed}."
-                    ),
-                    total = length(date),
-                    clear = FALSE)
+   cli_progress_bar(
+      format = paste0("{cli::pb_spin} Downloading {i} ",
+                      "[{cli::pb_current}/{cli::pb_total}]   ETA:{cli::pb_eta}"),
+      format_done = paste0(
+         "{cli::col_green(cli::symbol$tick)} Downloaded {cli::pb_total} files ",
+         "in {cli::pb_elapsed}."
+      ),
+      total = length(date),
+      clear = FALSE
+   )
+
    res <- list()
    for (i in date){
       cli_progress_update()
