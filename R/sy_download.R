@@ -93,7 +93,8 @@ read_synop <- function(date, summarized){
 
    download.file(url,
                  destfile = tmp,
-                 quiet = TRUE)
+                 quiet = TRUE,
+                 method = "curl")
 
    synop <- read.csv2(gzfile(file.path(tmp)),
                       dec = ".",
